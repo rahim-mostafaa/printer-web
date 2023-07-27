@@ -8,9 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function reformatParam(srt) {
         let newStr = srt.replace(/_-/g, ' ');
-        newStr = srt.replace(/-_/g, '\n');
-        newStr = srt.replace(/,-/g, '<');
-        newStr = srt.replace(/-,/g, '>');
+        newStr = newStr.replace(/-_/g, `
+        `);
+        newStr = newStr.replace(/,-/g, '<');
+        newStr = newStr.replace(/-,/g, '>');
         return newStr;
     }
     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -18,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     const styles = reformatParam(params.styles);
     const printContents = reformatParam(params.printContents);
+    alert('styles : ' + styles);
+    alert('printContents : ' + printContents);
     const htmlContent = `
             <html>
               <head>
