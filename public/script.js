@@ -14,14 +14,16 @@ document.addEventListener('DOMContentLoaded', function () {
         newStr = newStr.replace(/-,/g, '>');
         return newStr;
     }
-    const params = new Proxy(new URLSearchParams(window.location.search), {
-        get: (searchParams, prop) => searchParams.get(prop),
-    });
-    const styles = reformatParam(params.styles);
-    const printContents = reformatParam(params.printContents);
-    alert('styles : ' + styles);
-    alert('printContents : ' + printContents);
-    const htmlContent = `
+    try {
+        const params = new Proxy(new URLSearchParams(window.location.search), {
+            get: (searchParams, prop) => searchParams.get(prop),
+        });
+
+        const styles = reformatParam(params.styles);
+        const printContents = reformatParam(params.printContents);
+        alert('styles : ' + styles);
+        alert('printContents : ' + printContents);
+        const htmlContent = `
             <html>
               <head>
               <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -40,8 +42,12 @@ document.addEventListener('DOMContentLoaded', function () {
                   }
                 </script>
             </html>`;
-    popupWin = window.open('', 'top=0,left=0,height=100%,width=auto')
-    popupWin.document.write(htmlContent);
+        popupWin = window.open('', 'top=0,left=0,height=100%,width=auto')
+        popupWin.document.write(htmlContent);
+
+    } catch (error) {
+        alert(`error : ${error}`);
+    }
 
 
 });
