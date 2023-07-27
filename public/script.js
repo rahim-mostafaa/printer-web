@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
+
     // const getParameters = (URL) => {
     //     URL = JSON.parse('{"' + decodeURI(URL.split("?")[1]).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
     //     return URL;
@@ -15,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const params = new Proxy(new URLSearchParams(window.location.search), {
         get: (searchParams, prop) => searchParams.get(prop),
     });
-
     const styles = reformatParam(params.styles);
     const printContents = reformatParam(params.printContents);
     const htmlContent = `
