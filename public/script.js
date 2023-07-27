@@ -6,23 +6,28 @@ document.addEventListener('DOMContentLoaded', function () {
     // };
     // console.log(getParameters(window.location.href));
 
-    function reformatParam(srt) {
-        let newStr = srt.replace(/_-/g, ' ');
-        newStr = newStr.replace(/-_/g, `
-        `);
-        newStr = newStr.replace(/,-/g, '<');
-        newStr = newStr.replace(/-,/g, '>');
-        return newStr;
-    }
     try {
-        const params = new Proxy(new URLSearchParams(window.location.search), {
-            get: (searchParams, prop) => searchParams.get(prop),
-        });
-
-        const styles = reformatParam(params.styles);
-        const printContents = reformatParam(params.printContents);
-        alert('styles : ' + styles);
-        alert('printContents : ' + printContents);
+        // const params = new Proxy(new URLSearchParams(window.location.search), {
+        //     get: (searchParams, prop) => searchParams.get(prop),
+        // });
+        // firebase login:ci('params.styles : ' + params.styles);
+        // alert('params.htmlcontents : ' + params.htmlcontents);
+        // alert(`params.styles :  ${params.htmlcontents.split('+-++-+')[1]}`);
+        function reformatParam(srt) {
+            let newStr = srt.replace(/ā/g, ' ');
+            newStr = newStr.replace(/ß/g, `
+    `);
+            newStr = newStr.replace(/æ/g, '<');
+            newStr = newStr.replace(/ñ/g, '>');
+            newStr = newStr.replace(/á/g, '+');
+            return newStr;
+        }
+        const ref = location.href.split('?htmlcontents=')[1]
+        const params = ref.split('+-++-+');
+        const styles = reformatParam(params[1] ? params[1] : '');
+        let htmlcontents = params[0] ? params[0] : '';
+        htmlcontents = (new URLSearchParams(`?data=${htmlcontents}`)).get('data');
+        htmlcontents = reformatParam(htmlcontents);
         const htmlContent = `
             <html>
               <head>
@@ -35,15 +40,13 @@ document.addEventListener('DOMContentLoaded', function () {
               }
               ${styles ?? ''}
               </style>
-              <body dir='rtl'>${printContents}</body>
+              <body dir='rtl'>${htmlcontents}</body>
               <script type = 'text/javascript'>
-                window.onload = function(){
                   window.print();
-                  }
                 </script>
             </html>`;
-        popupWin = window.open('', 'top=0,left=0,height=100%,width=auto')
-        popupWin.document.write(htmlContent);
+        // let popupWin = window.open('', 'top=0,left=0,height=100%,width=auto')
+        document.write(htmlContent);
 
     } catch (error) {
         alert(`error : ${error}`);
